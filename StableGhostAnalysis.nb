@@ -1,0 +1,619 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 13.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     23150,        611]
+NotebookOptionsPosition[     22369,        591]
+NotebookOutlinePosition[     22780,        607]
+CellTagsIndexPosition[     22737,        604]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"Setup", " ", "system", " ", "parameters"}], "*)"}], 
+  RowBox[{
+   RowBox[{
+    RowBox[{"nPoints", "=", "100"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"xMax", "=", "10"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"\[Lambda]", "=", 
+     RowBox[{"1", "/", "3"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"dx", "=", 
+     RowBox[{"2", " ", 
+      RowBox[{"xMax", "/", 
+       RowBox[{"(", 
+        RowBox[{"nPoints", "-", "1"}], ")"}]}]}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"xGrid", "=", 
+     RowBox[{"Range", "[", 
+      RowBox[{
+       RowBox[{"-", "xMax"}], ",", "xMax", ",", 
+       RowBox[{"2", " ", 
+        RowBox[{"xMax", "/", 
+         RowBox[{"(", 
+          RowBox[{"nPoints", "-", "1"}], ")"}]}]}]}], "]"}]}], 
+    ";"}]}]}]], "Input",
+ CellLabel->"In[1]:=",ExpressionUUID->"436a2bd5-4199-4e9f-82c1-4cb5b30c5d50"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"Setup", " ", "operators"}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"SetupOperators", "[", "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "k", "}"}], ",", 
+      RowBox[{"(*", 
+       RowBox[{"Single", " ", "particle", " ", "position", " ", "operators"}],
+        "*)"}], 
+      RowBox[{
+       RowBox[{"xSingle", "=", 
+        RowBox[{"DiagonalMatrix", "[", "xGrid", "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{
+        "Momentum", " ", "grid", " ", "using", " ", "FourierFrequencies"}], 
+        "*)"}], 
+       RowBox[{"k", "=", 
+        RowBox[{"2", "\[Pi]", " ", 
+         RowBox[{"FourierFrequencies", "[", 
+          RowBox[{"nPoints", ",", "dx"}], "]"}]}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"pSingle", "=", 
+        RowBox[{"DiagonalMatrix", "[", "k", "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{"Identity", " ", "matrix"}], "*)"}], 
+       RowBox[{"id", "=", 
+        RowBox[{"IdentityMatrix", "[", "nPoints", "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{"Two", "-", 
+         RowBox[{
+         "particle", " ", "operators", " ", "using", " ", 
+          "KroneckerProduct"}]}], "*)"}], 
+       RowBox[{"xOp", "=", 
+        RowBox[{"KroneckerProduct", "[", 
+         RowBox[{"xSingle", ",", "id"}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"yOp", "=", 
+        RowBox[{"KroneckerProduct", "[", 
+         RowBox[{"id", ",", "xSingle"}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"pxOp", "=", 
+        RowBox[{"KroneckerProduct", "[", 
+         RowBox[{"pSingle", ",", "id"}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"pyOp", "=", 
+        RowBox[{"KroneckerProduct", "[", 
+         RowBox[{"id", ",", "pSingle"}], "]"}]}], ";"}]}], "]"}]}], 
+   "\[IndentingNewLine]", "\n", 
+   RowBox[{"(*", 
+    RowBox[{"Setup", " ", "Hamiltonian"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"SetupHamiltonian", "[", "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "H0x", ",", "H0y", ",", "xMat", ",", "yMat", ",", "vInt", ",", 
+        "\[CurlyEpsilon]"}], "}"}], ",", 
+      RowBox[{"(*", 
+       RowBox[{"Free", " ", "parts"}], "*)"}], 
+      RowBox[{
+       RowBox[{"H0x", "=", 
+        RowBox[{
+         RowBox[{"1", "/", "2"}], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"pxOp", ".", "pxOp"}], "+", 
+           RowBox[{"xOp", ".", "xOp"}]}], ")"}]}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"H0y", "=", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"-", "1"}], "/", "2"}], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"pyOp", ".", "pyOp"}], "+", 
+           RowBox[{"yOp", ".", "yOp"}]}], ")"}]}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{"Interaction", " ", "potential"}], "*)"}], 
+       RowBox[{"xMat", "=", 
+        RowBox[{"Normal", "[", "xOp", "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"yMat", "=", 
+        RowBox[{"Normal", "[", "yOp", "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"\[CurlyEpsilon]", "=", 
+        RowBox[{"10", "^", 
+         RowBox[{"-", "10"}]}]}], ";", 
+       RowBox[{"(*", 
+        RowBox[{"avoid", " ", "division", " ", "by", " ", "zero"}], "*)"}], 
+       RowBox[{"vInt", "=", 
+        RowBox[{"\[Lambda]", " ", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"xMat", "^", "2"}], "-", 
+               RowBox[{"yMat", "^", "2"}], "-", "1"}], ")"}], "^", "2"}], "+", 
+            RowBox[{"4", 
+             RowBox[{"xMat", "^", "2"}]}], "+", "\[CurlyEpsilon]"}], ")"}], 
+          "^", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"-", "1"}], "/", "2"}], ")"}]}]}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{"Full", " ", "Hamiltonian"}], "*)"}], 
+       RowBox[{"H", "=", 
+        RowBox[{"H0x", "+", "H0y", "+", "vInt"}]}], ";"}]}], "]"}]}], 
+   "\[IndentingNewLine]", "\n", 
+   RowBox[{"(*", 
+    RowBox[{"Create", " ", "Gaussian", " ", "wavepacket"}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"GaussianWavepacket", "[", 
+     RowBox[{"x0_", ",", "p0_", ",", 
+      RowBox[{"\[Sigma]_", ":", "0.5"}]}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "\[Psi]", "}"}], ",", 
+      RowBox[{
+       RowBox[{"\[Psi]", "=", 
+        RowBox[{"Exp", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"-", 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"xGrid", "-", "x0"}], ")"}], "^", "2"}]}], "/", 
+           RowBox[{"(", 
+            RowBox[{"4", 
+             RowBox[{"\[Sigma]", "^", "2"}]}], ")"}]}], "+", 
+          RowBox[{"I", " ", "p0", " ", "xGrid"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"\[Psi]", "/", 
+        RowBox[{"Sqrt", "[", 
+         RowBox[{"Total", "[", 
+          RowBox[{
+           RowBox[{"Abs", "[", "\[Psi]", "]"}], "^", "2"}], "]"}], 
+         "]"}]}]}]}], "]"}]}], "\[IndentingNewLine]", "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"Create", " ", "initial", " ", "two"}], "-", 
+     RowBox[{"particle", " ", "state"}]}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"CreateInitialState", "[", 
+     RowBox[{"x0_", ",", "y0_", ",", "px0_", ",", "py0_"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"\[Psi]x", ",", "\[Psi]y"}], "}"}], ",", 
+      RowBox[{
+       RowBox[{"\[Psi]x", "=", 
+        RowBox[{"GaussianWavepacket", "[", 
+         RowBox[{"x0", ",", "px0"}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"\[Psi]y", "=", 
+        RowBox[{"GaussianWavepacket", "[", 
+         RowBox[{"y0", ",", "py0"}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"Flatten", "[", 
+        RowBox[{"KroneckerProduct", "[", 
+         RowBox[{"\[Psi]x", ",", "\[Psi]y"}], "]"}], "]"}]}]}], "]"}]}], 
+   "\[IndentingNewLine]", "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+    "Time", " ", "evolution", " ", "and", " ", "expectation", " ", "values"}],
+     "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"TimeEvolve", "[", 
+     RowBox[{"\[Psi]0_", ",", "times_"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "nEigs", ",", "evals", ",", "evecs", ",", "coeffs", ",", "\[Psi]t", 
+        ",", "xExp", ",", "yExp", ",", "pxExp", ",", "pyExp"}], "}"}], ",", 
+      RowBox[{"(*", 
+       RowBox[{"Diagonalize", " ", "Hamiltonian"}], "*)"}], 
+      RowBox[{
+       RowBox[{"Print", "[", "\"\<Computing eigensystem...\>\"", "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"nEigs", "=", 
+        RowBox[{"Min", "[", 
+         RowBox[{"100", ",", 
+          RowBox[{
+           RowBox[{"nPoints", "^", "2"}], "-", "2"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"evals", ",", "evecs"}], "}"}], "=", 
+        RowBox[{"Eigensystem", "[", 
+         RowBox[{"H", ",", "nEigs", ",", 
+          RowBox[{"Method", "->", 
+           RowBox[{"{", 
+            RowBox[{"\"\<Arnoldi\>\"", ",", 
+             RowBox[{"\"\<Shift\>\"", "->", "0"}]}], "}"}]}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{"Sort", " ", "by", " ", "real", " ", "part"}], "*)"}], 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"evals", ",", "evecs"}], "}"}], "=", 
+        RowBox[{"Transpose", "[", 
+         RowBox[{"SortBy", "[", 
+          RowBox[{
+           RowBox[{"Transpose", "[", 
+            RowBox[{"{", 
+             RowBox[{"evals", ",", "evecs"}], "}"}], "]"}], ",", 
+           RowBox[{
+            RowBox[{"Re", "[", 
+             RowBox[{"#", "[", 
+              RowBox[{"[", "1", "]"}], "]"}], "]"}], "&"}]}], "]"}], "]"}]}], 
+       ";", "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{"Project", " ", "initial", " ", "state"}], "*)"}], 
+       RowBox[{"coeffs", "=", 
+        RowBox[{
+         RowBox[{"Conjugate", "[", "evecs", "]"}], ".", "\[Psi]0"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{"Initialize", " ", "arrays"}], "*)"}], 
+       RowBox[{"xExp", "=", 
+        RowBox[{"yExp", "=", 
+         RowBox[{"pxExp", "=", 
+          RowBox[{"pyExp", "=", 
+           RowBox[{"ConstantArray", "[", 
+            RowBox[{"0.", ",", 
+             RowBox[{"Length", "[", "times", "]"}]}], "]"}]}]}]}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{"Time", " ", "evolution"}], "*)"}], 
+       RowBox[{"Print", "[", "\"\<Evolving state...\>\"", "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Do", "[", 
+        RowBox[{"(*", 
+         RowBox[{"Evolve", " ", "state"}], "*)"}], 
+        RowBox[{
+         RowBox[{
+          RowBox[{"\[Psi]t", "=", 
+           RowBox[{"evecs", ".", 
+            RowBox[{"(", 
+             RowBox[{"(", 
+              RowBox[{"coeffs", " ", 
+               RowBox[{"Exp", "[", 
+                RowBox[{
+                 RowBox[{"-", "I"}], " ", "evals", " ", "t"}], "]"}]}], ")"}],
+              ")"}]}]}], ";", "\[IndentingNewLine]", 
+          RowBox[{"(*", 
+           RowBox[{"Compute", " ", "expectation", " ", "values"}], "*)"}], 
+          RowBox[{
+           RowBox[{"xExp", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], "=", 
+           RowBox[{"Re", "[", 
+            RowBox[{
+             RowBox[{"Conjugate", "[", "\[Psi]t", "]"}], ".", 
+             RowBox[{"(", 
+              RowBox[{"xOp", ".", "\[Psi]t"}], ")"}]}], "]"}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"yExp", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], "=", 
+           RowBox[{"Re", "[", 
+            RowBox[{
+             RowBox[{"Conjugate", "[", "\[Psi]t", "]"}], ".", 
+             RowBox[{"(", 
+              RowBox[{"yOp", ".", "\[Psi]t"}], ")"}]}], "]"}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"pxExp", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], "=", 
+           RowBox[{"Re", "[", 
+            RowBox[{
+             RowBox[{"Conjugate", "[", "\[Psi]t", "]"}], ".", 
+             RowBox[{"(", 
+              RowBox[{"pxOp", ".", "\[Psi]t"}], ")"}]}], "]"}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"pyExp", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], "=", 
+           RowBox[{"Re", "[", 
+            RowBox[{
+             RowBox[{"Conjugate", "[", "\[Psi]t", "]"}], ".", 
+             RowBox[{"(", 
+              RowBox[{"pyOp", ".", "\[Psi]t"}], ")"}]}], "]"}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"(*", 
+           RowBox[{"Print", " ", "progress"}], "*)"}], 
+          RowBox[{"If", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Mod", "[", 
+              RowBox[{"i", ",", "100"}], "]"}], "==", "0"}], ",", 
+            RowBox[{
+             RowBox[{"Print", "[", 
+              RowBox[{"\"\<Time step \>\"", ",", "i", ",", "\"\</\>\"", ",", 
+               RowBox[{"Length", "[", "times", "]"}]}], "]"}], ";", 
+             "\[IndentingNewLine]", 
+             RowBox[{"Print", "[", 
+              RowBox[{"\"\<Position: (\>\"", ",", 
+               RowBox[{"NumberForm", "[", 
+                RowBox[{
+                 RowBox[{"xExp", "[", 
+                  RowBox[{"[", "i", "]"}], "]"}], ",", "3"}], "]"}], ",", 
+               "\"\<, \>\"", ",", 
+               RowBox[{"NumberForm", "[", 
+                RowBox[{
+                 RowBox[{"yExp", "[", 
+                  RowBox[{"[", "i", "]"}], "]"}], ",", "3"}], "]"}], ",", 
+               "\"\<)\>\""}], "]"}], ";"}]}], "]"}]}], ",", 
+         RowBox[{"{", 
+          RowBox[{"i", ",", 
+           RowBox[{"Length", "[", "times", "]"}]}], "}"}]}], "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{"xExp", ",", "yExp", ",", "pxExp", ",", "pyExp"}], "}"}]}]}], 
+     "]"}]}], "\[IndentingNewLine]", "\n", 
+   RowBox[{"(*", 
+    RowBox[{"Plot", " ", "trajectories"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"PlotTrajectories", "[", 
+     RowBox[{
+     "xExp_", ",", "yExp_", ",", "pxExp_", ",", "pyExp_", ",", "times_"}], 
+     "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"posPlot", ",", "momPlot"}], "}"}], ",", 
+      RowBox[{"(*", 
+       RowBox[{"Position", " ", "space", " ", "trajectory"}], "*)"}], 
+      RowBox[{
+       RowBox[{"posPlot", "=", 
+        RowBox[{"ListLinePlot", "[", 
+         RowBox[{
+          RowBox[{"Transpose", "[", 
+           RowBox[{"{", 
+            RowBox[{"xExp", ",", "yExp"}], "}"}], "]"}], ",", 
+          RowBox[{"PlotStyle", "->", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Thickness", "[", "0.002", "]"}], ",", 
+             RowBox[{"ColorFunction", "->", 
+              RowBox[{"Function", "[", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"x", ",", "y"}], "}"}], ",", 
+                RowBox[{
+                 RowBox[{"ColorData", "[", "\"\<TemperatureMap\>\"", "]"}], 
+                 "[", 
+                 RowBox[{"Rescale", "[", 
+                  RowBox[{"times", ",", 
+                   RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"Min", "[", "times", "]"}], ",", 
+                    RowBox[{"Max", "[", "times", "]"}]}], "}"}]}], "]"}], 
+                 "]"}]}], "]"}]}]}], "}"}]}], ",", 
+          RowBox[{"PlotRange", "->", "All"}], ",", 
+          RowBox[{"Frame", "->", "True"}], ",", 
+          RowBox[{"FrameLabel", "->", 
+           RowBox[{"{", 
+            RowBox[{"\"\<x\>\"", ",", "\"\<y\>\""}], "}"}]}], ",", 
+          RowBox[{"PlotLabel", "->", "\"\<Position Space Trajectory\>\""}], 
+          ",", 
+          RowBox[{"AspectRatio", "->", "1"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{"Momentum", " ", "space", " ", "trajectory"}], "*)"}], 
+       RowBox[{"momPlot", "=", 
+        RowBox[{"ListLinePlot", "[", 
+         RowBox[{
+          RowBox[{"Transpose", "[", 
+           RowBox[{"{", 
+            RowBox[{"pxExp", ",", "pyExp"}], "}"}], "]"}], ",", 
+          RowBox[{"PlotStyle", "->", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Thickness", "[", "0.002", "]"}], ",", 
+             RowBox[{"ColorFunction", "->", 
+              RowBox[{"Function", "[", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"x", ",", "y"}], "}"}], ",", 
+                RowBox[{
+                 RowBox[{"ColorData", "[", "\"\<TemperatureMap\>\"", "]"}], 
+                 "[", 
+                 RowBox[{"Rescale", "[", 
+                  RowBox[{"times", ",", 
+                   RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"Min", "[", "times", "]"}], ",", 
+                    RowBox[{"Max", "[", "times", "]"}]}], "}"}]}], "]"}], 
+                 "]"}]}], "]"}]}]}], "}"}]}], ",", 
+          RowBox[{"PlotRange", "->", "All"}], ",", 
+          RowBox[{"Frame", "->", "True"}], ",", 
+          RowBox[{"FrameLabel", "->", 
+           RowBox[{"{", 
+            RowBox[{"\"\<px\>\"", ",", "\"\<py\>\""}], "}"}]}], ",", 
+          RowBox[{"PlotLabel", "->", "\"\<Momentum Space Trajectory\>\""}], 
+          ",", 
+          RowBox[{"AspectRatio", "->", "1"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{"Show", " ", "plots", " ", "side", " ", "by", " ", "side"}], 
+        "*)"}], 
+       RowBox[{"GraphicsGrid", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"{", 
+           RowBox[{"posPlot", ",", "momPlot"}], "}"}], "}"}], ",", 
+         RowBox[{"ImageSize", "->", "800"}]}], "]"}]}]}], "]"}]}], 
+   "\n"}]}]], "Input",
+ CellChangeTimes->{{3.946037009161257*^9, 3.946037009162258*^9}, {
+  3.9460383639683123`*^9, 3.9460384093804197`*^9}},
+ CellLabel->"In[6]:=",ExpressionUUID->"a92043f0-57e6-4add-bb68-3a655060228f"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"Main", " ", "analysis", " ", "function"}], "*)"}], "\n", 
+  RowBox[{
+   RowBox[{"AnalyzePaperTrajectory", "[", "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"\[Psi]0", ",", "times", ",", "results"}], "}"}], ",", 
+     RowBox[{"(*", 
+      RowBox[{"Setup", " ", "system"}], "*)"}], 
+     RowBox[{
+      RowBox[{"SetupOperators", "[", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"SetupHamiltonian", "[", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{
+       "Create", " ", "initial", " ", "state", " ", "from", " ", "paper"}], 
+       "*)"}], 
+      RowBox[{"\[Psi]0", "=", 
+       RowBox[{"CreateInitialState", "[", 
+        RowBox[{"2", ",", "1", ",", "0", ",", "0"}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{"Time", " ", "evolution"}], "*)"}], 
+      RowBox[{"times", "=", 
+       RowBox[{"Range", "[", 
+        RowBox[{"0", ",", "500", ",", "0.5"}], "]"}]}], ";", 
+      RowBox[{"(*", 
+       RowBox[{"1000", " ", "points"}], "*)"}], 
+      RowBox[{"results", "=", 
+       RowBox[{"TimeEvolve", "[", 
+        RowBox[{"\[Psi]0", ",", "times"}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{"Plot", " ", "trajectories"}], "*)"}], 
+      RowBox[{"Print", "[", "\"\<Plotting trajectories...\>\"", "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"PlotTrajectories", "[", 
+       RowBox[{
+        RowBox[{"results", "[", 
+         RowBox[{"[", "1", "]"}], "]"}], ",", 
+        RowBox[{"results", "[", 
+         RowBox[{"[", "2", "]"}], "]"}], ",", 
+        RowBox[{"results", "[", 
+         RowBox[{"[", "3", "]"}], "]"}], ",", 
+        RowBox[{"results", "[", 
+         RowBox[{"[", "4", "]"}], "]"}], ",", "times"}], "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{"Compute", " ", "stability", " ", "metrics"}], "*)"}], 
+      RowBox[{"Module", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"r", ",", "p"}], "}"}], ",", 
+        RowBox[{
+         RowBox[{"r", "=", 
+          RowBox[{"Sqrt", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"results", "[", 
+              RowBox[{"[", "1", "]"}], "]"}], "^", "2"}], "+", 
+            RowBox[{
+             RowBox[{"results", "[", 
+              RowBox[{"[", "2", "]"}], "]"}], "^", "2"}]}], "]"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"p", "=", 
+          RowBox[{"Sqrt", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"results", "[", 
+              RowBox[{"[", "3", "]"}], "]"}], "^", "2"}], "+", 
+            RowBox[{
+             RowBox[{"results", "[", 
+              RowBox[{"[", "4", "]"}], "]"}], "^", "2"}]}], "]"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"Print", "[", "\"\<\\nStability Analysis:\>\"", "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"Print", "[", 
+          RowBox[{"\"\<Maximum radius: \>\"", ",", 
+           RowBox[{"NumberForm", "[", 
+            RowBox[{
+             RowBox[{"Max", "[", "r", "]"}], ",", "3"}], "]"}]}], "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"Print", "[", 
+          RowBox[{"\"\<Maximum momentum: \>\"", ",", 
+           RowBox[{"NumberForm", "[", 
+            RowBox[{
+             RowBox[{"Max", "[", "p", "]"}], ",", "3"}], "]"}]}], "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"Print", "[", 
+          RowBox[{"\"\<Final radius: \>\"", ",", 
+           RowBox[{"NumberForm", "[", 
+            RowBox[{
+             RowBox[{"r", "[", 
+              RowBox[{"[", 
+               RowBox[{"-", "1"}], "]"}], "]"}], ",", "3"}], "]"}]}], "]"}], 
+         ";", "\[IndentingNewLine]", 
+         RowBox[{"Print", "[", 
+          RowBox[{"\"\<Energy conservation (std/mean): \>\"", ",", 
+           RowBox[{"NumberForm", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"StandardDeviation", "[", "r", "]"}], "/", 
+              RowBox[{"Mean", "[", "r", "]"}]}], ",", "3"}], "]"}]}], 
+          "]"}]}]}], "]"}]}]}], "]"}]}]}]], "Input",
+ CellLabel->"In[12]:=",ExpressionUUID->"67ad7321-9375-4938-9bf1-ec0cd866c917"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"Run", " ", "the", " ", "analysis"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"AnalyzePaperTrajectory", "[", "]"}]}]], "Input",
+ CellLabel->"In[13]:=",ExpressionUUID->"8959d13c-3b9a-453e-a22b-202ab666e34c"],
+
+Cell[BoxData["$Aborted"], "Output",
+ CellChangeTimes->{3.946039577532188*^9},
+ CellLabel->"Out[13]=",ExpressionUUID->"c24a0436-e7a2-4d96-8ffb-ae178925b3d4"]
+}, Open  ]]
+},
+WindowSize->{1426.5, 728.25},
+WindowMargins->{{0.75, Automatic}, {Automatic, 0.75}},
+FrontEndVersion->"13.0 for Microsoft Windows (64-bit) (December 2, 2021)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"5d122cdf-259e-4dab-aa16-1ec9c6aaa463"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 879, 28, 105, "Input",ExpressionUUID->"436a2bd5-4199-4e9f-82c1-4cb5b30c5d50"],
+Cell[1440, 50, 16236, 416, 1056, "Input",ExpressionUUID->"a92043f0-57e6-4add-bb68-3a655060228f"],
+Cell[17679, 468, 4227, 106, 276, "Input",ExpressionUUID->"67ad7321-9375-4938-9bf1-ec0cd866c917"],
+Cell[CellGroupData[{
+Cell[21931, 578, 263, 6, 48, "Input",ExpressionUUID->"8959d13c-3b9a-453e-a22b-202ab666e34c"],
+Cell[22197, 586, 156, 2, 32, "Output",ExpressionUUID->"c24a0436-e7a2-4d96-8ffb-ae178925b3d4"]
+}, Open  ]]
+}
+]
+*)
+
