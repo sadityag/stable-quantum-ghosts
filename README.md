@@ -2,7 +2,7 @@ To observe the naive quantized formulations of the stable quantum ghosts, there 
 
 
 1) exact_trajectories_schrodinger.py
-2) 
+
   This file provides a static plot with the time coordinate indicated by a heatmap. The step size, grid size, etc are controllable parameters.
 
   Uses the Trotter decomposition to linear order in the time step to evolve the Hamiltonian.
